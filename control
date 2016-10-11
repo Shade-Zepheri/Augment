@@ -1,0 +1,9 @@
+Package: com.shade.augment
+Name: Augment
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Upscale that uses Substrate
+Maintainer: Shade Zepheri
+Author: Shade Zepheri
+Section: Tweaks
