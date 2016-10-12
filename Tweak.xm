@@ -1,11 +1,17 @@
 #import "Aug.h"
-NSString *hue;
 
-%hook PSMagnifyController
+static BOOL enabled = NO;
+static CGSize six = {750,1334};
+static CGFloat height = six.height;
+static NSString *hue = [NSString stringWithFormat: @"%.2f", height];
 
--(void)commitMagnifyMode:(id)arg1 {
-	arg1 = [PSMagnifyMode magnifyModeWithSize:{width:750,height:1334} name:@"" localizedName:@"" isZoomed:1]];
-	%orig(arg1);
+
+%hook SBLockScreenViewController
+- (void)finishUIUnlockFromSource:(int)arg1 {
+  %orig();
+  if (enabled) {
+      UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unlock" message:hue delegate:nil cancelButtonTitle:@"OK :)" otherButtonTitles:nil, nil];
+      [alertView show];
+  }
 }
-
 %end
