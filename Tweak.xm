@@ -17,6 +17,7 @@ static NSString *hue = [NSString stringWithFormat: @"%.2f", height];
 
 %end
 
+//WAS JUST A TEST, NOT ACTUALLY PART OF TWEAK
 %hook SBLockScreenViewController
 - (void)finishUIUnlockFromSource:(int)arg1 {
   %orig();
