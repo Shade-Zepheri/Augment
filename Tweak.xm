@@ -7,15 +7,19 @@ static CGSize size = CGSizeMake(width, height);
 static NSString *hue = [NSString stringWithFormat: @"%.2f,%.2f", width, height];
 
 static void loadPrefs() {
-    CFPreferencesAppSynchronize(CFSTR(SETTINGSFILENEW));
-    enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW)) ? NO : [(id)CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW))) boolValue];
+  CFPreferencesAppSynchronize(CFSTR(SETTINGSFILENEW));
+  enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW)) ? NO : [(id)CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW))) boolValue];
 }
 
 %hook PSMagnifyController
 
-+(void)commitMagnifyMode:(id)arg1 {
-  arg1 = [PSMagnifyMode magnifyModeWithSize:size name:@"" localizedName:@"" isZoomed:1];
-  %orig(arg1);
+- (void)commitMagnifyMode:(id)arg1 {
+  if(!enabled){
+    %orig();
+  }else{
+    arg1 = [PSMagnifyMode magnifyModeWithSize:size name:@"" localizedName:@"" isZoomed:1];
+    %orig(arg1);
+  }
 }
 
 %end
