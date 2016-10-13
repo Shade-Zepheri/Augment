@@ -1,6 +1,6 @@
 Package: com.shade.augment
 Name: Augment
-Depends: mobilesubstrate
+Depends: mobilesubstrate, preferenceloader
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: Upscale that uses Substrate
