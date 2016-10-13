@@ -1,19 +1,16 @@
 #import "Aug.h"
 
 static BOOL enabled = NO;
-static CGSize six = {750,1334};
-static CGFloat height = six.height;
-static NSString *hue = [NSString stringWithFormat: @"%.2f", height];
-
-%hook PSMagnifyMode
-
-+(id)magnifyModeWithSize:(CGSize)arg1 name:(id)arg2 localizedName:(id)arg3 isZoomed:(BOOL)arg4 ;
-
-%end
+static CGFloat width = 750;
+static CGFloat height = 1334;
+static CGSize size = CGSizeMake(width, height);
+static NSString *hue = [NSString stringWithFormat: @"%.2f,%.2f", width, height];
 
 %hook PSMagnifyController
 
-+(void)commitMagnifyMode:(id)arg1 withRelaunchURL:(id)arg2 ;
+//+(void)commitMagnifyMode:(id)arg1 {
+  //arg1 = [PSMagnifyMode magnifyModeWithSize:size name:@"" localizedName:@"" isZoomed:1];
+//}
 
 %end
 
