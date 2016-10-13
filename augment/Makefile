@@ -5,6 +5,7 @@ augment_FILES = AUGRootListController.m
 augment_INSTALL_PATH = /Library/PreferenceBundles
 augment_FRAMEWORKS = UIKit
 augment_PRIVATE_FRAMEWORKS = Preferences
+augment_CFLAGS += -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

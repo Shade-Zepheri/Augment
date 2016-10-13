@@ -18,7 +18,7 @@
 			<key>key</key>
 			<string>enabled</string>
 			<key>label</key>
-			<string>enabled</string>
+			<string>Enabled</string>
 		</dict>
 	</array>
 	<key>title</key>
