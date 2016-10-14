@@ -10,10 +10,36 @@ static void loadPrefs() {
   CFPreferencesAppSynchronize(CFSTR(SETTINGSFILENEW));
   enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW)) ? NO : [(id)CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW))) boolValue];
 }
+%hook PSMagnifyMode
+
+-(void)setSize:(CGSize)arg1 {
+  HBLogDebug(@"Ths method was run");
+  %orig();
+}
+
+-(void)setName:(NSString *)arg1 {
+  HBLogDebug(@"Ths method was run");
+  %orig();
+}
+
+-(void)setLocalizedName:(NSString *)arg1 {
+  HBLogDebug(@"Ths method was run");
+  %orig();
+
+}
+
+-(void)setZoomed:(BOOL)arg1 {
+  HBLogDebug(@"Ths method was run");
+  %orig();
+
+}
+
+%end
 
 %hook PSMagnifyController
 
 - (void)commitMagnifyMode:(id)arg1 {
+  HBLogDebug(@"Ths method was run");
   if(!enabled){
     %orig();
   }else{
@@ -22,24 +48,6 @@ static void loadPrefs() {
   }
 }
 
-%end
-
-//WAS JUST A TEST, NOT ACTUALLY PART OF TWEAK
-%hook SBLockScreenViewController
-- (void)finishUIUnlockFromSource:(int)arg1 {
-  %orig();
-  if (enabled) {
-      UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Unlock"
-                               message:hue
-                               preferredStyle:UIAlertControllerStyleAlert];
-
-      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-         handler:^(UIAlertAction * action) {}];
-
-      [alert addAction:defaultAction];
-      [self presentViewController:alert animated:YES completion:nil];
-  }
-}
 %end
 
 %ctor {
