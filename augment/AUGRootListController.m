@@ -38,13 +38,12 @@
 	self.table.tableHeaderView.frame = frame;
 }
 
-- (void)respring:(id)sender {
-  CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(),
-                                       CFSTR(RESPRING),
-                                       nil,
-                                       nil,
-                                       true);
+-(void)applySettings {
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(),
+                                    CFSTR(APPLY),
+                                    nil,
+                                    nil,
+                                    true);
 }
-
 
 @end

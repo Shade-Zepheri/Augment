@@ -26,9 +26,9 @@
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>label</key>
-			<string>Respring</string>
+			<string>Apply Settings?</string>
 			<key>action</key>
-			<string>respring</string>
+			<string>applySettings</string>
 		</dict>
 	</array>
 	<key>title</key>

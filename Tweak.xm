@@ -1,51 +1,44 @@
 #import "Aug.h"
 
+CGSize *size;
+NSString *name;
+NSString *localizedName;
+BOOL *isZoomed;
+
 static BOOL enabled;
 static CGFloat width = 750;
 static CGFloat height = 1334;
-static CGSize size = CGSizeMake(width, height);
 static NSString *hue = [NSString stringWithFormat: @"%.2f,%.2f", width, height];
 
 static void loadPrefs() {
   CFPreferencesAppSynchronize(CFSTR(SETTINGSFILENEW));
   enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW)) ? NO : [(id)CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW))) boolValue];
 }
+
+void applySettings() {
+  [PSMagnifyController commitMagnifyMode:[PSMagnifyMode magnifyModeWithSize:size name:name localizedName:localizedNamename isZoomed:isZoomed]];
+}
+
 %hook PSMagnifyMode
 
--(void)setSize:(CGSize)arg1 {
-  HBLogDebug(@"Ths method was run");
-  %orig();
+-(CGSize)size {
+  return CGSizeMake(width, height);
+  size = self;
 }
 
--(void)setName:(NSString *)arg1 {
-  HBLogDebug(@"Ths method was run");
-  %orig();
+-(NSString *)name {
+  return @"";
+  name = self;
 }
 
--(void)setLocalizedName:(NSString *)arg1 {
-  HBLogDebug(@"Ths method was run");
-  %orig();
-
+-(NSString *)localizedName {
+  return @"";
+  localizedName = self;
 }
 
--(void)setZoomed:(BOOL)arg1 {
-  HBLogDebug(@"Ths method was run");
-  %orig();
-
-}
-
-%end
-
-%hook PSMagnifyController
-
-- (void)commitMagnifyMode:(id)arg1 {
-  HBLogDebug(@"Ths method was run");
-  if(!enabled){
-    %orig();
-  }else{
-    arg1 = [PSMagnifyMode magnifyModeWithSize:size name:@"" localizedName:@"" isZoomed:1];
-    %orig(arg1);
-  }
+-(BOOL)isZoomed {
+  return 1;
+  isZoomed = self;
 }
 
 %end
@@ -57,5 +50,11 @@ static void loadPrefs() {
                                     CFSTR(PREFERENCES_CHANGED_NOTIFICATION),
                                     NULL,
                                     CFNotificationSuspensionBehaviorCoalesce);
+  CFNotificationCenterAddObserver (CFNotificationCenterGetDarwinNotifyCenter(),
+                                    NULL,
+                                    (CFNotificationCallback)applySettings,
+                                    CFSTR(APPLY),
+                                    NULL,
+                                    0);
 	loadPrefs();
 }
