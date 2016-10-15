@@ -1,60 +1,30 @@
-#import "Aug.h"
+static BOOL enabled = YES;
+static unsigned long long width = 750;
+static unsigned long long height = 1334;
+static CGSize nsize = CGSizeMake(width, height);
 
-CGSize *size;
-NSString *name;
-NSString *localizedName;
-BOOL *isZoomed;
+%hook CADisplayMode
 
-static BOOL enabled;
-static CGFloat width = 750;
-static CGFloat height = 1334;
-static NSString *hue = [NSString stringWithFormat: @"%.2f,%.2f", width, height];
-
-static void loadPrefs() {
-  CFPreferencesAppSynchronize(CFSTR(SETTINGSFILENEW));
-  enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW)) ? NO : [(id)CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR(SETTINGSFILENEW))) boolValue];
-}
-
-void applySettings() {
-  [PSMagnifyController commitMagnifyMode:[PSMagnifyMode magnifyModeWithSize:size name:name localizedName:localizedNamename isZoomed:isZoomed]];
-}
-
-%hook PSMagnifyMode
-
--(CGSize)size {
-  return CGSizeMake(width, height);
-  size = self;
-}
-
--(NSString *)name {
-  return @"";
-  name = self;
-}
-
--(NSString *)localizedName {
-  return @"";
-  localizedName = self;
-}
-
--(BOOL)isZoomed {
-  return 1;
-  isZoomed = self;
+-(void)_setWidth:(unsigned long long)arg1 height:(unsigned long long)arg2 {
+  if(!enabled){
+    %orig();
+  }else{
+    HBLogDebug(@"Set Width Ran");
+    %orig(width,height);
+  }
 }
 
 %end
 
-%ctor {
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
-                                    NULL,
-                                    (CFNotificationCallback)loadPrefs,
-                                    CFSTR(PREFERENCES_CHANGED_NOTIFICATION),
-                                    NULL,
-                                    CFNotificationSuspensionBehaviorCoalesce);
-  CFNotificationCenterAddObserver (CFNotificationCenterGetDarwinNotifyCenter(),
-                                    NULL,
-                                    (CFNotificationCallback)applySettings,
-                                    CFSTR(APPLY),
-                                    NULL,
-                                    0);
-	loadPrefs();
-}
+%hook UIScreenMode
+
+ -(CGSize)size {
+   if(!enabled){
+     return %orig();
+   }else{
+     HBLogDebug(@"CGSize Ran");
+     return nsize;
+   }
+ }
+
+%end
