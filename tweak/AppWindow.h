@@ -1,3 +1,8 @@
+/*
+
+Credits to CortexDevTeam and Ethan Arbuckle for the method
+
+*/
 #import <UIKit/UIKit.h>
 #import "CDTContextHostProvider.h"
 
@@ -7,10 +12,9 @@
 @property (nonatomic, retain) UIView *hostedContextView;
 @property (nonatomic, retain) NSTimer *hostingCheckTimer;
 @property (nonatomic, retain) CDTContextHostProvider *contextProvider;
-
 @property UIInterfaceOrientation *activeOrientation;
 
 - (float)level;
-- (void)runHostingCheck;
+- (void)runHostCheck;
 
 @end

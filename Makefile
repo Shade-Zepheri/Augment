@@ -4,6 +4,9 @@ TWEAK_NAME = Augment
 Augment_FILES = $(wildcard tweak/*.m tweak/*.mm tweak/*.x tweak/*.xm)
 Augment_FRAMEWORKS = UIKit
 Augment_PRIVATE_FRAMEWORKS = Preferences
+Augment_CFLAGS = -fobjc-arc
+ADDITIONAL_OBJCFLAGS = -fobjc-arc
+
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

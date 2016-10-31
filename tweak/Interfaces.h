@@ -1,6 +1,3 @@
-#import <SpringBoard/SBApplication.h>
-#import <SpringBoard/SBApplicationController.h>
-
 @interface FBSceneHostManager : NSObject
 - (void)enableHostingForRequester:(id)arg1 orderFront:(BOOL)arg2;
 - (void)enableHostingForRequester:(id)arg1 priority:(int)arg2;
@@ -31,4 +28,9 @@ void receivedPortraitRotate();
 - (id)contextHostManager;
 - (id)mutableSettings;
 -(void)_applyMutableSettings:(id)arg1 withTransitionContext:(id)arg2 completion:(id)arg3;
+@end
+
+@interface SBApplicationController
++ (id)sharedInstance;
+- (id)applicationWithBundleIdentifier:(NSString *)bid;
 @end

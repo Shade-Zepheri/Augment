@@ -1,6 +1,5 @@
+// Credits: Phillip Tennen from Popcorn
 #import "Interfaces.h"
-
-#define NEED_IPAD_HAX UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad
 
 @interface CDTContextHostProvider : NSObject
 
@@ -17,6 +16,8 @@
 - (BOOL)isHostViewHosting:(UIView *)hostView;
 - (void)forceRehostingOnBundleID:(NSString *)bundleID;
 - (void)stopHostingForBundleID:(NSString *)bundleID;
-- (void)_ipad_only_update_hosting;
+- (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID;
+- (void)sendPortraitRotationNotificationToBundleID:(NSString *)bundleID;
+- (void)setStatusBarHidden:(NSNumber *)hidden onApplicationWithBundleID:(NSString *)bundleID;
 
 @end
