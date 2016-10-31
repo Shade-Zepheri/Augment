@@ -5,14 +5,9 @@
 - (id)init {
 
 	if (self = [super init]) {
-
-        //On ipads >8.3, context host views stop hosting when another context begins hosting.
-        //To get around this, everytime we begin hosting a new context we'll cycle through all
-        //the other ones and force them to host as well.
         if (NEED_IPAD_HAX) {
             _onlyIpad_runningIdentifiers = [[NSMutableArray alloc] init];
         }
-
 	}
 
 	return self;
