@@ -6,7 +6,6 @@
 @end
 
 @interface UIApplication (Private)
-- (void)_relaunchSpringBoardNow;
 - (id)_accessibilityFrontMostApplication;
 - (void)launchApplicationWithIdentifier: (NSString*)identifier suspended: (BOOL)suspended;
 - (id)displayIdentifier;
@@ -33,4 +32,8 @@ void receivedPortraitRotate();
 @interface SBApplicationController
 + (id)sharedInstance;
 - (id)applicationWithBundleIdentifier:(NSString *)bid;
+@end
+
+@interface SBApplication : NSObject
+- (BOOL)statusBarHidden;
 @end
