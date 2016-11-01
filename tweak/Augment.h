@@ -9,8 +9,5 @@
 @property (nonatomic, readwrite) NSInteger stackedWindowLevel;
 
 + (id)sharedInstance;
-- (id)topmostApplication;
-- (void)beginWindowModeForTopApplication;
-- (void)beginWindowModeForApplicationWithBundleID:(NSString *)bundleID;
 
 @end
