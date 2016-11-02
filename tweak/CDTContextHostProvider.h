@@ -1,21 +1,33 @@
-// Credits: Phillip Tennen from Popcorn
+// Credits: From Popcorn by Ethan Arbuckle
 #import "Interfaces.h"
 
-@interface CDTContextHostProvider : NSObject
+@interface CDTContextHostProvider : NSObject {
+	NSMutableDictionary* _hostedApplications;
+}
 
-@property (nonatomic, retain) NSMutableArray *onlyIpad_runningIdentifiers;
+@property (nonatomic, assign) BOOL currentAppHasFinishedLaunching;
+
++ (instancetype)sharedInstance;
 
 - (UIView *)hostViewForApplication:(id)sbapplication;
 - (UIView *)hostViewForApplicationWithBundleID:(NSString *)bundleID;
+- (NSString *)bundleIDFromHostView:(UIView *)hostView;
+
 - (void)launchSuspendedApplicationWithBundleID:(NSString *)bundleID;
+
 - (void)disableBackgroundingForApplication:(id)sbapplication;
 - (void)enableBackgroundingForApplication:(id)sbapplication;
+
 - (FBScene *)FBSceneForApplication:(id)sbapplication;
 - (FBSceneHostManager *)contextManagerForApplication:(id)sbapplication;
 - (FBSMutableSceneSettings *)sceneSettingsForApplication:(id)sbapplication;
+
 - (BOOL)isHostViewHosting:(UIView *)hostView;
 - (void)forceRehostingOnBundleID:(NSString *)bundleID;
+
 - (void)stopHostingForBundleID:(NSString *)bundleID;
+//- (void)startHostingForBundleID:(NSString *)bundleID;
+
 - (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID;
 - (void)sendPortraitRotationNotificationToBundleID:(NSString *)bundleID;
 - (void)setStatusBarHidden:(NSNumber *)hidden onApplicationWithBundleID:(NSString *)bundleID;
