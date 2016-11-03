@@ -1,6 +1,16 @@
 #define __is__iOS9__ [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0
 CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 
+@interface SBRootFolderController : NSObject
+@property (nonatomic, retain) UIView* contentView;
+@end
+
+@interface SBIconController : NSObject
++ (id)sharedInstance;
+- (SBRootFolderController*)_rootFolderController;
+- (SBRootFolderController*)_currentFolderController;
+@end
+
 @interface FBSceneHostManager : NSObject
 - (void)enableHostingForRequester:(id)arg1 orderFront:(BOOL)arg2;
 - (void)enableHostingForRequester:(id)arg1 priority:(int)arg2;
@@ -20,6 +30,9 @@ void receivedPortraitRotate();
 
 @interface FBSceneHostWrapperView : UIView
 - (BOOL)isHosting;
+@end
+
+@interface FBWindowContextHostManager : FBSceneHostManager
 @end
 
 @interface FBSMutableSceneSettings

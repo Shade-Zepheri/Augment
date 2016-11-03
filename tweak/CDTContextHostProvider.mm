@@ -23,6 +23,7 @@
 
 - (UIView *)hostViewForApplication:(SBApplication*)sbapplication {
 	NSString* bundleIdentifier = sbapplication.bundleIdentifier;
+  [self launchSuspendedApplicationWithBundleID:[(SBApplication *)sbapplication bundleIdentifier]];
 
 	if ([_hostedApplications objectForKey:bundleIdentifier]) {
 		return [_hostedApplications objectForKey:bundleIdentifier];
@@ -31,37 +32,12 @@
 	//let the app run in the background
 	[self enableBackgroundingForApplication:sbapplication];
 
-	//open it
-	[self launchSuspendedApplicationWithBundleID:[(SBApplication *)sbapplication bundleIdentifier]];
-
 	//allow hosting of our new hostview
 	[[self contextManagerForApplication:sbapplication] enableHostingForRequester:[(SBApplication *)sbapplication bundleIdentifier] orderFront:YES];
 
 	//get our fancy new hosting view
-
-	//wait for the app to launch if it wasn't already live in the background
 	UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
-	/*
-	__block UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		while (!hostView) {
-			[NSThread sleepForTimeInterval:0.05];
-			dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-				hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
-			});
-		}
-	});
-	*/
-	//UIView* hostView = [self forceHostViewRetrievalWithApplication:sbapplication];
-//__block UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
-/*
-	UIView* hostView = nil;
-	[self retrieveHostView:&hostView application:sbapplication completion:^{
-		*/
-		//[_hostedApplications setObject:hostView forKey:bundleIdentifier];
-
 		hostView.accessibilityHint = bundleIdentifier;
-	//}];
 
 	return hostView;
 }
@@ -82,25 +58,7 @@
 - (NSString*)bundleIDFromHostView:(UIView*)hostView {
 	return hostView.accessibilityHint;
 }
-/*
-- (UIView*)forceHostViewRetrievalWithApplication:(SBApplication*)sbapplication {
-	UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
-	if (hostView) return hostView;
 
-	NSLog(@"[Popcorn] host view did not exist, trying again");
-
-	SEL selector = @selector(forceHostViewRetrievalWithApplication:);
-	NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[CDTContextHostProvider instanceMethodSignatureForSelector:selector]];
-    [invocation setSelector:selector];
-    [invocation setArgument:&sbapplication atIndex:0];
-    [invocation setTarget:self];
-    //[invocation invoke];
-    [invocation performSelector:@selector(invoke) withObject:nil afterDelay:0.05f];
-    UIView* returnValue;
-    [invocation getReturnValue:&returnValue];
-    return returnValue;
-}
-*/
 - (UIView *)hostViewForApplicationWithBundleID:(NSString *)bundleID {
 
 	//get application reference
@@ -144,7 +102,7 @@
 	return [(SBApplication *)sbapplication mainScene];
 }
 
-- (FBSceneHostManager *)contextManagerForApplication:(id)sbapplication {
+- (FBWindowContextHostManager *)contextManagerForApplication:(id)sbapplication {
 	return [[self FBSceneForApplication:sbapplication] contextHostManager];
 }
 
@@ -175,7 +133,6 @@
     [self disableBackgroundingForApplication:appToHost];
 
     [_hostedApplications removeObjectForKey:bundleID];
-
 }
 
 - (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID {
