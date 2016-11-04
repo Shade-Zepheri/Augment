@@ -28,9 +28,10 @@
 }
 
 - (void)beginWindowModeForApplicationWithBundleID:(NSString *)bundleID {
+	HBLogDebug(@"%@", bundleID);
   SBApplication *appToWindow = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleID];
   UIView *contextHost = [_contextHostProvider hostViewForApplicationWithBundleID:bundleID];
-
+	HBLogDebug(@"%@", appToWindow);
   AugWindow *appWindow = [[AugWindow alloc] initWithFrame:CGRectMake(37.5, 67, 300, 533)];
 
   [appWindow setIdentifier:bundleID];

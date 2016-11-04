@@ -14,6 +14,7 @@
 }
 
 - (UIView *)hostViewForApplication:(SBApplication*)sbapplication {
+	HBLogDebug(@"%@", sbapplication);
 
 	//let the app run in the background
 	[self enableBackgroundingForApplication:sbapplication];
@@ -40,7 +41,7 @@
 
 	//get application reference
 	SBApplication *appToHost = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleID];
-
+	HBLogDebug(@"%@", appToHost);
 	//return hostview
 	return [self hostViewForApplication:appToHost];
 }
