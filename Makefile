@@ -1,4 +1,5 @@
 TARGET = iphone:clang:9.3:9.3
+DEBUG = 1;
 
 include $(THEOS)/makefiles/common.mk
 
