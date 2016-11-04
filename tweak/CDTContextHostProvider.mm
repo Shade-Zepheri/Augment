@@ -6,35 +6,20 @@
 - (id)init {
 
 	if (self = [super init]) {
-
-        //On ipads >8.3, context host views stop hosting when another context begins hosting.
-        //To get around this, everytime we begin hosting a new context we'll cycle through all
-        //the other ones and force them to host as well.
-        if (NEED_IPAD_HAX) {
-            _onlyIpad_runningIdentifiers = [[NSMutableArray alloc] init];
-        }
-
+      if (NEED_IPAD_HAX) {
+        _onlyIpad_runningIdentifiers = [[NSMutableArray alloc] init];
+      }
 	}
-
 	return self;
 }
 
-- (UIView *)hostViewForApplication:(id)sbapplication {
-
-	//open it
-	[self launchSuspendedApplicationWithBundleID:[(SBApplication *)sbapplication bundleIdentifier]];
-
-    //add current identifier
-    if (NEED_IPAD_HAX) {
-
-        if (![_onlyIpad_runningIdentifiers containsObject:[(SBApplication *)sbapplication bundleIdentifier]]) {
-
-            [_onlyIpad_runningIdentifiers addObject:[(SBApplication *)sbapplication bundleIdentifier]];
-        }
-    }
+- (UIView *)hostViewForApplication:(SBApplication*)sbapplication {
 
 	//let the app run in the background
 	[self enableBackgroundingForApplication:sbapplication];
+
+	//open it
+	[self launchSuspendedApplicationWithBundleID:[(SBApplication *)sbapplication bundleIdentifier]];
 
 	//allow hosting of our new hostview
 	[[self contextManagerForApplication:sbapplication] enableHostingForRequester:[(SBApplication *)sbapplication bundleIdentifier] orderFront:YES];

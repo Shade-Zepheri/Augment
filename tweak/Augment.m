@@ -17,7 +17,7 @@
 	if (self = [super init]) {
     _stackedWindowLevel = 9999;
 		_contextHostProvider = [[CDTContextHostProvider alloc] init];
-    //_windows = [[NSMutableDictionary alloc] init];
+    _windows = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
@@ -46,9 +46,53 @@
 
   [_contextHostProvider setStatusBarHidden:@(1) onApplicationWithBundleID:bundleID];
 
-  //[_windows setValue:appWindow forKey:bundleID];
+  [_windows setValue:appWindow forKey:bundleID];
 
   [_contextHostProvider sendPortraitRotationNotificationToBundleID:bundleID];
+}
+
+- (void)unwindowApplicationWithBundleID:(NSString *)bundleID {
+
+    //get window instance, if exists
+    __block AugWindow *window;
+    if ([_windows valueForKey:bundleID]) {
+
+        window = [_windows valueForKey:bundleID];
+    }
+
+    else {
+
+        //stop if it doesnt exist
+        return;
+    }
+
+    //show statusbar
+	[_contextHostProvider setStatusBarHidden:@([window statusBarHidden]) onApplicationWithBundleID:bundleID];
+
+	//animate it out
+	[UIView animateWithDuration:0.3 animations:^{
+
+		//fade it out
+		[window setAlpha:0];
+		[window setTransform:CGAffineTransformMakeScale(.1, .1)];
+
+	} completion:^(BOOL completed){
+
+		//end hosting
+		SBApplication *appToHost = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleID];
+		[_contextHostProvider disableBackgroundingForApplication:appToHost];
+		[_contextHostProvider stopHostingForBundleID:bundleID];
+
+		//remove the view
+		[window setHidden:YES];
+        window = NULL;
+
+        //remove value from dict
+        [[(AugWindow *)[_windows valueForKey:bundleID] hostingCheckTimer] invalidate];
+        [_windows removeObjectForKey:bundleID];
+
+    }];
+
 }
 
 - (id)topmostApplication {

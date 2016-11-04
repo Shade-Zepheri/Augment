@@ -4,7 +4,6 @@
 @interface AugWindow : UIWindow
 
 @property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, retain) UIView *barView;
 @property (nonatomic, retain) UIView *hostedContextView;
 @property (nonatomic, retain) NSTimer *hostingCheckTimer;
 @property (nonatomic, retain) CDTContextHostProvider *contextProvider;

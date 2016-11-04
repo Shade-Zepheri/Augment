@@ -22,8 +22,6 @@
 - (void)forceRehostingOnBundleID:(NSString *)bundleID;
 
 - (void)stopHostingForBundleID:(NSString *)bundleID;
-//- (void)startHostingForBundleID:(NSString *)bundleID;
-
 - (void)_ipad_only_update_hosting;
 
 - (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID;
