@@ -59,3 +59,27 @@ void receivedPortraitRotate();
 - (id)bundleIdentifier;
 - (id)mainScene;
 @end
+
+@interface SBDeactivationSettings
+-(id)init;
+-(void)setFlag:(int)flag forDeactivationSetting:(unsigned)deactivationSetting;
+@end
+@interface SBWorkspaceApplicationTransitionContext : NSObject
+@property(nonatomic) _Bool animationDisabled; // @synthesize animationDisabled=_animationDisabled;
+- (void)setEntity:(id)arg1 forLayoutRole:(int)arg2;
+@end
+@interface SBWorkspaceDeactivatingEntity
+@property(nonatomic) long long layoutRole; // @synthesize layoutRole=_layoutRole;
++ (id)entity;
+@end
+@interface SBWorkspaceHomeScreenEntity : NSObject
+@end
+@interface SBMainWorkspaceTransitionRequest : NSObject
+- (id)initWithDisplay:(id)arg1;
+@end
+@interface SBAppToAppWorkspaceTransaction
+- (void)begin;
+- (id)initWithAlertManager:(id)alertManager exitedApp:(id)app;
+- (id)initWithAlertManager:(id)arg1 from:(id)arg2 to:(id)arg3 withResult:(id)arg4;
+- (id)initWithTransitionRequest:(id)arg1;
+@end

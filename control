@@ -3,7 +3,7 @@ Name: Augment
 Depends: mobilesubstrate, preferenceloader
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: Upscale that uses Substrate
+Description: Apps Inside Windows
 Maintainer: Shade Zepheri
 Author: Shade Zepheri
 Section: Tweaks

@@ -2,9 +2,9 @@ Package: com.shade.augment
 Name: Augment
 Depends: mobilesubstrate, preferenceloader
 Architecture: iphoneos-arm
-Description: Upscale that uses Substrate
+Description: Apps Inside Windows
 Maintainer: Shade Zepheri
 Author: Shade Zepheri
 Section: Tweaks
-Version: 0.0.1-92
-Installed-Size: 328
+Version: 0.0.1-99+debug
+Installed-Size: 316

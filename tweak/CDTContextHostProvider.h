@@ -1,13 +1,16 @@
 #import "Interfaces.h"
 
-#define NEED_IPAD_HAX UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad
+@interface CDTContextHostProvider : NSObject {
+	NSMutableDictionary* _hostedApplications;
+}
 
-@interface CDTContextHostProvider : NSObject
+@property (nonatomic, assign) BOOL currentAppHasFinishedLaunching;
 
-@property (nonatomic, retain) NSMutableArray *onlyIpad_runningIdentifiers;
++ (instancetype)sharedInstance;
 
 - (UIView *)hostViewForApplication:(id)sbapplication;
 - (UIView *)hostViewForApplicationWithBundleID:(NSString *)bundleID;
+- (NSString *)bundleIDFromHostView:(UIView *)hostView;
 
 - (void)launchSuspendedApplicationWithBundleID:(NSString *)bundleID;
 
@@ -15,14 +18,14 @@
 - (void)enableBackgroundingForApplication:(id)sbapplication;
 
 - (FBScene *)FBSceneForApplication:(id)sbapplication;
-- (FBWindowContextHostManager *)contextManagerForApplication:(id)sbapplication;
+- (FBSceneHostManager *)contextManagerForApplication:(id)sbapplication;
 - (FBSMutableSceneSettings *)sceneSettingsForApplication:(id)sbapplication;
 
 - (BOOL)isHostViewHosting:(UIView *)hostView;
 - (void)forceRehostingOnBundleID:(NSString *)bundleID;
 
 - (void)stopHostingForBundleID:(NSString *)bundleID;
-- (void)_ipad_only_update_hosting;
+//- (void)startHostingForBundleID:(NSString *)bundleID;
 
 - (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID;
 - (void)sendPortraitRotationNotificationToBundleID:(NSString *)bundleID;
