@@ -1,0 +1,58 @@
+#import "Augment.h"
+
+@implementation AugMent
+
++ (id)sharedInstance {
+	static dispatch_once_t p = 0;
+	__strong static id _sharedObject = nil;
+
+	dispatch_once(&p, ^{
+		_sharedObject = [[self alloc] init];
+	});
+
+	return _sharedObject;
+}
+
+- (id)init {
+	if (self = [super init]) {
+    _stackedWindowLevel = 9999;
+		_contextHostProvider = [[CDTContextHostProvider alloc] init];
+    //_windows = [[NSMutableDictionary alloc] init];
+	}
+	return self;
+}
+
+- (void)beginWindowModeForTopApplication {
+  NSString *bundleID = [[self topmostApplication] valueForKey:@"_bundleIdentifier"];
+  [self beginWindowModeForApplicationWithBundleID:bundleID];
+}
+
+- (void)beginWindowModeForApplicationWithBundleID:(NSString *)bundleID {
+  SBApplication *appToWindow = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleID];
+  UIView *contextHost = [_contextHostProvider hostViewForApplicationWithBundleID:bundleID];
+
+  AugWindow *appWindow = [[AugWindow alloc] initWithFrame:CGRectMake(37.5, 67, 300, 533)];
+
+  [appWindow setIdentifier:bundleID];
+  [appWindow setHostedContextView:contextHost];
+  [appWindow setWindowLevel:_stackedWindowLevel++];
+
+  if ([appToWindow respondsToSelector:@selector(statusBarHidden)]) {
+
+     [appWindow setStatusBarHidden:[appToWindow statusBarHidden]];
+  }
+
+  [appWindow addSubview:contextHost];
+
+  [_contextHostProvider setStatusBarHidden:@(1) onApplicationWithBundleID:bundleID];
+
+  //[_windows setValue:appWindow forKey:bundleID];
+
+  [_contextHostProvider sendPortraitRotationNotificationToBundleID:bundleID];
+}
+
+- (id)topmostApplication {
+	return [[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+}
+
+@end

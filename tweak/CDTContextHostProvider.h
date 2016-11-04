@@ -1,16 +1,13 @@
 #import "Interfaces.h"
 
-@interface CDTContextHostProvider : NSObject {
-	NSMutableDictionary* _hostedApplications;
-}
+#define NEED_IPAD_HAX UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad
 
-@property (nonatomic, assign) BOOL currentAppHasFinishedLaunching;
+@interface CDTContextHostProvider : NSObject
 
-+ (instancetype)sharedInstance;
+@property (nonatomic, retain) NSMutableArray *onlyIpad_runningIdentifiers;
 
 - (UIView *)hostViewForApplication:(id)sbapplication;
 - (UIView *)hostViewForApplicationWithBundleID:(NSString *)bundleID;
-- (NSString *)bundleIDFromHostView:(UIView *)hostView;
 
 - (void)launchSuspendedApplicationWithBundleID:(NSString *)bundleID;
 
@@ -26,6 +23,8 @@
 
 - (void)stopHostingForBundleID:(NSString *)bundleID;
 //- (void)startHostingForBundleID:(NSString *)bundleID;
+
+- (void)_ipad_only_update_hosting;
 
 - (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID;
 - (void)sendPortraitRotationNotificationToBundleID:(NSString *)bundleID;

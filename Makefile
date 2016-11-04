@@ -1,3 +1,5 @@
+TARGET = iphone:clang:9.3:9.3
+
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Augment
@@ -6,7 +8,6 @@ Augment_FRAMEWORKS = UIKit
 Augment_PRIVATE_FRAMEWORKS = Preferences
 Augment_CFLAGS = -fobjc-arc
 ADDITIONAL_OBJCFLAGS = -fobjc-arc
-
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
