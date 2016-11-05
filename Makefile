@@ -4,8 +4,8 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Augment
 Augment_FILES = $(wildcard tweak/*.m tweak/*.mm tweak/*.x tweak/*.xm)
-Augment_FRAMEWORKS = UIKit
-Augment_PRIVATE_FRAMEWORKS = Preferences
+Augment_FRAMEWORKS = UIKit CoreGraphics QuartzCore
+Augment_PRIVATE_FRAMEWORKS = Preferences BackboardServices
 Augment_CFLAGS = -fobjc-arc
 ADDITIONAL_OBJCFLAGS = -fobjc-arc
 

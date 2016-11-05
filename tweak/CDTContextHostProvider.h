@@ -18,7 +18,7 @@
 - (void)enableBackgroundingForApplication:(id)sbapplication;
 
 - (FBScene *)FBSceneForApplication:(id)sbapplication;
-- (FBSceneHostManager *)contextManagerForApplication:(id)sbapplication;
+- (FBWindowContextHostManager *)contextManagerForApplication:(id)sbapplication;
 - (FBSMutableSceneSettings *)sceneSettingsForApplication:(id)sbapplication;
 
 - (BOOL)isHostViewHosting:(UIView *)hostView;

@@ -21,7 +21,7 @@
 	return self;
 }
 
-- (UIView *)hostViewForApplication:(SBApplication*)sbapplication {
+- (UIView *)hostViewForApplication:(SBApplication*)sbapplication {	
 	NSString* bundleIdentifier = sbapplication.bundleIdentifier;
 
 	if ([_hostedApplications objectForKey:bundleIdentifier]) {
@@ -41,7 +41,28 @@
 
 	//wait for the app to launch if it wasn't already live in the background
 	UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
-	hostView.accessibilityHint = bundleIdentifier;
+	/*
+	__block UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		while (!hostView) {
+			[NSThread sleepForTimeInterval:0.05];
+			dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+				hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
+			});
+		}
+	});
+	*/
+	//UIView* hostView = [self forceHostViewRetrievalWithApplication:sbapplication];
+//__block UIView *hostView = [[self contextManagerForApplication:sbapplication] hostViewForRequester:[(SBApplication *)sbapplication bundleIdentifier] enableAndOrderFront:YES];
+/*
+	UIView* hostView = nil;
+	[self retrieveHostView:&hostView application:sbapplication completion:^{
+		*/
+		//[_hostedApplications setObject:hostView forKey:bundleIdentifier];
+
+		hostView.accessibilityHint = bundleIdentifier;
+	//}];
+
 	return hostView;
 }
 /*
@@ -123,7 +144,7 @@
 	return [(SBApplication *)sbapplication mainScene];
 }
 
-- (FBSceneHostManager *)contextManagerForApplication:(id)sbapplication {
+- (FBWindowContextHostManager *)contextManagerForApplication:(id)sbapplication {
 	return [[self FBSceneForApplication:sbapplication] contextHostManager];
 }
 
@@ -142,14 +163,14 @@
     SBApplication *appToForce = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleID];
     [self launchSuspendedApplicationWithBundleID:bundleID];
     [self enableBackgroundingForApplication:appToForce];
-    FBSceneHostManager *manager = [self contextManagerForApplication:appToForce];
+    FBWindowContextHostManager *manager = [self contextManagerForApplication:appToForce];
     [manager enableHostingForRequester:bundleID priority:1];
 }
 
 - (void)stopHostingForBundleID:(NSString *)bundleID {
 
 	SBApplication *appToHost = [[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithBundleIdentifier:bundleID];
-	FBSceneHostManager *contextManager = [self contextManagerForApplication:appToHost];
+	FBWindowContextHostManager *contextManager = [self contextManagerForApplication:appToHost];
 	[contextManager disableHostingForRequester:bundleID];
     [self disableBackgroundingForApplication:appToHost];
 
@@ -157,22 +178,22 @@
 
     if (__is__iOS9__) {
 	    SBWorkspaceApplicationTransitionContext* transitionContext = [[NSClassFromString(@"SBWorkspaceApplicationTransitionContext") alloc] init];
-
+	    
 	    //set layout role to 'side' (deactivating)
 	    SBWorkspaceDeactivatingEntity* deactivatingEntity = [NSClassFromString(@"SBWorkspaceDeactivatingEntity") entity];
 	    [deactivatingEntity setLayoutRole:3];
 	    [transitionContext setEntity:deactivatingEntity forLayoutRole:3];
-
+	    
 	    //set layout role for 'primary' (activating)
 	    SBWorkspaceHomeScreenEntity* homescreenEntity = [[NSClassFromString(@"SBWorkspaceHomeScreenEntity") alloc] init];
 	    [transitionContext setEntity:homescreenEntity forLayoutRole:2];
-
+	    
 	    [transitionContext setAnimationDisabled:YES];
-
+	    
 	    //create transititon request
 	    SBMainWorkspaceTransitionRequest* transitionRequest = [[NSClassFromString(@"SBMainWorkspaceTransitionRequest") alloc] initWithDisplay:[[UIScreen mainScreen] valueForKey:@"_fbsDisplay"]];
 	    [transitionRequest setValue:transitionContext forKey:@"_applicationContext"];
-
+	    
 	    //create apptoapp transaction
 	    SBAppToAppWorkspaceTransaction* transaction = [[NSClassFromString(@"SBAppToAppWorkspaceTransaction") alloc] initWithTransitionRequest:transitionRequest];
 	    [transaction begin];
@@ -181,7 +202,7 @@
 		SBAppToAppWorkspaceTransaction *transaction = [[NSClassFromString(@"SBAppToAppWorkspaceTransaction") alloc] initWithAlertManager:nil exitedApp:appToHost];
         [transaction begin];
 	}
-
+    
 }
 
 - (void)sendLandscapeRotationNotificationToBundleID:(NSString *)bundleID {
@@ -199,10 +220,10 @@
 }
 
 - (void)setStatusBarHidden:(NSNumber *)hidden onApplicationWithBundleID:(NSString *)bundleID {
-
-
+	
+        
     NSString *changeStatusBarNotification = [NSString stringWithFormat:@"%@LamoStatusBarChange", bundleID];
-    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), (CFStringRef)changeStatusBarNotification, NULL, (__bridge CFDictionaryRef) @{@"isHidden" : hidden } , YES);
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)changeStatusBarNotification, NULL, (__bridge CFDictionaryRef) @{@"isHidden" : hidden } , YES);
 }
 
 @end
