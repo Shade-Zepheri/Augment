@@ -89,6 +89,8 @@ static int invocationAttempts = 0;
         contentView.tag = kContentViewTag;
         [keyWindow addSubview:contentView];
 
+        [contentView fadeDimIn];
+
         self.pop_poppedBundleID = iconView.icon.applicationBundleID;
     };
 
